@@ -252,6 +252,7 @@
            INITIALIZE EURENT2-USUARIO.
            INITIALIZE EURDEC2-USUARIO.
 
+
            DISPLAY(8, 8) "Se  mostraran los ultimos movimientos,".
            DISPLAY(8, 47) "de mas a menos recientes.".
 
@@ -290,7 +291,8 @@
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
 
            OPEN INPUT F-MOVIMIENTOS.
-               IF FSM <> 30
+
+               IF FSM = 30
                    GO TO PSYS-ERR.
 
        POSICIONAR-FINAL.

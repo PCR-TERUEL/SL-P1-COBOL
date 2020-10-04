@@ -111,7 +111,8 @@
 
            IF FSM <> 30
                GO TO PSYS-ERR.
-
+           DISPLAY "ENTRO"
+           go to SLEEP.
            MOVE 0 TO LAST-MOV-NUM.
 
 
