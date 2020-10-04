@@ -138,11 +138,7 @@
            IF FSM = 30
                GO TO PSYS-ERR.
 
-           DISPLAY "----------------VOY A LEER----------"
-      *     READ F-MOVIMIENTOS INVALID KEY GO PSYS-ERR.
-            READ F-MOVIMIENTOS
-           DISPLAY "----------------PASEEEEEEEEE----------"
-           GO TO SLEEP.
+           READ F-MOVIMIENTOS INVALID KEY GO PSYS-ERR.
            DISPLAY HAY-SALDO-DISPLAY.
 
            CLOSE F-MOVIMIENTOS.
