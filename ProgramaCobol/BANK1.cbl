@@ -183,6 +183,7 @@
 
 
            IF CHOICE = 1
+
                CALL "BANK2" USING TNUM
                GO TO PMENU.
 
@@ -294,3 +295,6 @@
        REINICIAR-INTENTOS.
            MOVE 3 TO IINTENTOS.
            REWRITE INTENTOSREG INVALID KEY GO TO PSYS-ERR.
+
+       SLEEP.
+           GO TO SLEEP.

@@ -88,13 +88,11 @@
 
        PROCEDURE DIVISION USING TNUM.
        IMPRIMIR-CABECERA.
-
            SET ENVIRONMENT 'COB_SCREEN_EXCEPTIONS' TO 'Y'.
 
            DISPLAY BLANK-SCREEN.
            DISPLAY(2, 26) "Cajero Automatico UnizarBank"
                WITH FOREGROUND-COLOR IS 1.
-
            MOVE FUNCTION CURRENT-DATE TO CAMPOS-FECHA.
 
            DISPLAY(4, 32) DIA.
@@ -107,12 +105,12 @@
            DISPLAY(4, 47) MINUTOS.
 
        PCONSULTA-SALDO.
-           OPEN INPUT F-MOVIMIENTOS.
 
-           IF FSM <> 30
+           OPEN INPUT F-MOVIMIENTOS.
+           IF FSM = 30
                GO TO PSYS-ERR.
-           DISPLAY "ENTRO"
-           go to SLEEP.
+
+
            MOVE 0 TO LAST-MOV-NUM.
 
 
@@ -136,10 +134,15 @@
 
            MOVE LAST-MOV-NUM TO MOV-NUM.
            OPEN INPUT F-MOVIMIENTOS.
-           IF FSM <> 30
+           DISPLAY "1--> ", FSM
+           IF FSM = 30
                GO TO PSYS-ERR.
 
-           READ F-MOVIMIENTOS INVALID KEY GO PSYS-ERR.
+           DISPLAY "----------------VOY A LEER----------"
+      *     READ F-MOVIMIENTOS INVALID KEY GO PSYS-ERR.
+            READ F-MOVIMIENTOS
+           DISPLAY "----------------PASEEEEEEEEE----------"
+           GO TO SLEEP.
            DISPLAY HAY-SALDO-DISPLAY.
 
            CLOSE F-MOVIMIENTOS.
@@ -147,6 +150,7 @@
            GO TO EXIT-ENTER.
 
        NO-MOVIMIENTOS.
+           DISPLAY "NO HAY MOVIMIENTOS"
            DISPLAY(12, 34) "0".
            DISPLAY(12, 35) ".".
            DISPLAY(12, 36) "00".
@@ -156,7 +160,6 @@
            GO TO EXIT-ENTER.
 
        PSYS-ERR.
-
            CLOSE F-MOVIMIENTOS.
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
@@ -174,5 +177,6 @@
                EXIT PROGRAM
            ELSE
                GO TO EXIT-ENTER.
+
        SLEEP.
            GO TO SLEEP.
