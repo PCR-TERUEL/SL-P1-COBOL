@@ -243,7 +243,7 @@
        INSERTAR-MOVIMIENTO SECTION.
 
            OPEN I-O F-MOVIMIENTOS.
-           IF FSM <> 30
+           IF FSM = 30
               GO TO PSYS-ERR.
 
            SUBTRACT CENT-IMPOR-USER FROM CENT-SALDO-USER.
