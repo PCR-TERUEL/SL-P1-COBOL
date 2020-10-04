@@ -147,6 +147,8 @@
               GO TO PSYS-ERR.
 
 
+
+
            MOVE 0 TO LAST-MOV-NUM.
 
        LEER-ULTIMO-MOV-READ.
@@ -203,6 +205,8 @@
            IF FSM = 30
                GO TO PSYS-ERR.
 
+
+
            READ F-MOVIMIENTOS INVALID KEY GO TO PSYS-ERR.
 
            MOVE MOV-SALDOPOS-ENT TO SALDO-USUARIO-ENT.
@@ -246,9 +250,11 @@
 
 
        INSERTAR-MOVIMIENTO SECTION.
-           OPEN I-O F-MOVIMIENTOS.
+           OPEN OUTPUT F-MOVIMIENTOS.
            IF FSM = 30
               GO TO PSYS-ERR.
+
+
 
            ADD CENT-IMPOR-USER TO CENT-SALDO-USER
                ON SIZE ERROR GO TO PSYS-ERR.
@@ -279,6 +285,8 @@
 
            WRITE MOVIMIENTO-REG INVALID KEY GO TO PSYS-ERR.
            CLOSE F-MOVIMIENTOS.
+
+
 
            GO TO PANTALLA-INGRESO.
 
