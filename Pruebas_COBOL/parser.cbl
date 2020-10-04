@@ -47,7 +47,9 @@
        PROCEDURE DIVISION.
            DISPLAY 'SEQUENTIAL FILE READING & WRITING..'
            OPEN INPUT FILE1.
+           DISPLAY WS-FS1.
            OPEN OUTPUT FILE2.
+           DISPLAY WS-FS2.
 
                READ FILE1
 
