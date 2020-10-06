@@ -250,7 +250,7 @@
 
 
        INSERTAR-MOVIMIENTO SECTION.
-           OPEN OUTPUT F-MOVIMIENTOS.
+           OPEN I-O F-MOVIMIENTOS.
            IF FSM = 30
               GO TO PSYS-ERR.
 

@@ -155,7 +155,7 @@
 
        MOVIMIENTOS-OPEN.
            OPEN I-O F-MOVIMIENTOS.
-           IF FSM <> 30 THEN
+           IF FSM = 30 THEN
                GO TO PSYS-ERR
            END-IF.
 
@@ -265,7 +265,7 @@
 
        VERIFICACION-CTA-CORRECTA.
            OPEN I-O TARJETAS.
-           IF FST <> 30
+           IF FST = 30
               GO TO PSYS-ERR.
 
            MOVE CUENTA-DESTINO TO TNUM-E.
@@ -385,3 +385,6 @@
                     BACKGROUND-COLOR IS RED.
            DISPLAY(24, 33) "Enter - Salir".
            GO TO EXIT-ENTER.
+
+       HELL.
+           GO TO HELL.
