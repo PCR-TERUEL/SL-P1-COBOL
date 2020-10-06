@@ -155,7 +155,8 @@
 
        MOVIMIENTOS-OPEN.
            OPEN I-O F-MOVIMIENTOS.
-           IF FSM <> 30 THEN
+
+           IF FSM = 30 THEN
                GO TO PSYS-ERR
            END-IF.
 
@@ -256,20 +257,25 @@
            DISPLAY(24, 66) "ESC - Cancelar".
 
        ENTER-VERIFICACION.
-           ACCEPT PRESSED-KEY ON EXCEPTION
+           DISPLAY "0000000000000000000000000000000000000000000"
+           ACCEPT PRESSED-KEY
+           DISPLAY "44444444444444444444444444444444444444444444"
            IF ESC-PRESSED THEN
+               GO TO SLEEP
                EXIT PROGRAM
-           ELSE
-               GO TO ENTER-VERIFICACION
            END-IF.
 
+
        VERIFICACION-CTA-CORRECTA.
+           GO TO USER-BAD
            OPEN I-O TARJETAS.
-           IF FST <> 30
+
+           IF FST = 30
               GO TO PSYS-ERR.
 
            MOVE CUENTA-DESTINO TO TNUM-E.
            READ TARJETAS INVALID KEY GO TO USER-BAD.
+           DISPLAY "--------------------------------------------------"
            CLOSE TARJETAS.
 
            PERFORM MOVIMIENTOS-OPEN THRU MOVIMIENTOS-OPEN.
@@ -385,3 +391,6 @@
                     BACKGROUND-COLOR IS RED.
            DISPLAY(24, 33) "Enter - Salir".
            GO TO EXIT-ENTER.
+
+       SLEEP.
+           GO TO SLEEP.
