@@ -222,8 +222,6 @@
            CLOSE F-MOVIMIENTOS.
 
 
-
-
        PANTALLA-INGRESO SECTION.
            INITIALIZE EURENT-USUARIO.
            INITIALIZE EURDEC-USUARIO.
@@ -295,8 +293,6 @@
            WRITE MOVIMIENTO-REG INVALID KEY GO TO PSYS-ERR.
            CLOSE F-MOVIMIENTOS.
 
-           GO TO PANT.
-
        PANT SECTION.
 
            COMPUTE EURENT-USUARIO = (CENT-ACUMULADOR / 100).
@@ -336,7 +332,7 @@
        EXIT-ENTER.
            ACCEPT(24, 80) PRESSED-KEY
            IF ENTER-PRESSED
-               GO TO PANTALLA-INGRESO
+               GO TO IMPRIMIR-CABECERA
            ELSE
                IF ESC-PRESSED
                    EXIT PROGRAM
