@@ -256,15 +256,16 @@
            DISPLAY(24, 66) "ESC - Cancelar".
 
        ENTER-VERIFICACION.
-           ACCEPT PRESSED-KEY ON EXCEPTION
+           ACCEPT PRESSED-KEY
            IF ESC-PRESSED THEN
+               GO TO SLEEP
                EXIT PROGRAM
-           ELSE
-               GO TO ENTER-VERIFICACION
            END-IF.
+
 
        VERIFICACION-CTA-CORRECTA.
            OPEN I-O TARJETAS.
+
            IF FST = 30
               GO TO PSYS-ERR.
 
@@ -386,5 +387,5 @@
            DISPLAY(24, 33) "Enter - Salir".
            GO TO EXIT-ENTER.
 
-       HELL.
-           GO TO HELL.
+       SLEEP.
+           GO TO SLEEP.
