@@ -71,6 +71,9 @@
        77 LAST-USER-MOV-NUM        PIC   9(35).
        77 LAST-MOV-NUM             PIC   9(35).
 
+       77 BILL10-USUARIO           PIC    9(2).
+       77 BILL20-USUARIO           PIC    9(2).
+       77 BILL50-USUARIO           PIC    9(2).
        77 EURENT-USUARIO           PIC    9(7).
        77 EURDEC-USUARIO           PIC    9(2).
        77 SALDO-USUARIO-ENT        PIC   S9(9).
@@ -94,9 +97,11 @@
 
        01 ENTRADA-USUARIO.
            05 FILLER BLANK ZERO AUTO UNDERLINE
-               LINE 13 COL 41 PIC 9(7) USING EURENT-USUARIO.
+               LINE 14 COL 41 PIC 9(2) USING BILL10-USUARIO.
+           05 FILLER BLANK ZERO AUTO UNDERLINE
+               LINE 15 COL 41 PIC 9(2) USING BILL20-USUARIO.
            05 FILLER BLANK ZERO UNDERLINE
-               LINE 13 COL 49 PIC 9(2) USING EURDEC-USUARIO.
+               LINE 16 COL 41 PIC 9(2) USING BILL50-USUARIO.
 
        01 SALDO-DISPLAY.
            05 FILLER SIGN IS LEADING SEPARATE
@@ -222,6 +227,9 @@
        PANTALLA-INGRESO SECTION.
            INITIALIZE EURENT-USUARIO.
            INITIALIZE EURDEC-USUARIO.
+           INITIALIZE BILL10-USUARIO.
+           INITIALIZE BILL20-USUARIO.
+           INITIALIZE BILL50-USUARIO.
 
            DISPLAY(24, 33) "ESC - Finalizar ingreso efectivo".
            DISPLAY(8, 30) "Ingresar efectivo".
@@ -230,9 +238,9 @@
            DISPLAY SALDO-DISPLAY.
 
            DISPLAY(11, 19) "Por favor,introduzca billetes".
-           DISPLAY(13, 19) "Cantidad introducida:         ".
-           DISPLAY(13, 48) ".".
-           DISPLAY(13, 52) "EUR".
+           DISPLAY(14, 19) "BILLETES DE 10 EUR:         ".
+           DISPLAY(15, 19) "BILLETES DE 20 EUR:         ".
+           DISPLAY(16, 19) "BILLETES DE 50 EUR:         ".
 
        CONF2.
            ACCEPT ENTRADA-USUARIO ON EXCEPTION
@@ -242,12 +250,13 @@
                    GO TO CONF2
                END-IF.
 
-           COMPUTE CENT-IMPOR-USER = (EURENT-USUARIO * 100)
-                                     + EURDEC-USUARIO.
+           COMPUTE EURENT-USUARIO = (BILL10-USUARIO * 10) +
+                                    (BILL20-USUARIO * 20) +
+                                    (BILL50-USUARIO * 50)
+
+           COMPUTE CENT-IMPOR-USER = EURENT-USUARIO * 100
+
            ADD CENT-IMPOR-USER TO CENT-ACUMULADOR.
-
-
-
 
        INSERTAR-MOVIMIENTO SECTION.
            OPEN I-O F-MOVIMIENTOS.
@@ -286,12 +295,7 @@
            WRITE MOVIMIENTO-REG INVALID KEY GO TO PSYS-ERR.
            CLOSE F-MOVIMIENTOS.
 
-
-
-           GO TO PANTALLA-INGRESO.
-
-
-
+           GO TO PANT.
 
        PANT SECTION.
 
@@ -332,8 +336,9 @@
        EXIT-ENTER.
            ACCEPT(24, 80) PRESSED-KEY
            IF ENTER-PRESSED
-               EXIT PROGRAM
+               GO TO PANTALLA-INGRESO
            ELSE
-               GO TO EXIT-ENTER.
-       HELL.
-           GO TO HELL.
+               IF ESC-PRESSED
+                   EXIT PROGRAM
+               ELSE
+                   GO TO EXIT-ENTER.
