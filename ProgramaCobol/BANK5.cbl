@@ -138,14 +138,16 @@
 
 
 
-
        CONSULTA-ULTIMO-MOVIMIENTO SECTION.
 
            INITIALIZE CENT-ACUMULADOR.
 
            OPEN I-O F-MOVIMIENTOS.
-           IF FSM <> 30
+           IF FSM = 30
               GO TO PSYS-ERR.
+
+
+
 
            MOVE 0 TO LAST-MOV-NUM.
 
@@ -164,24 +166,30 @@
 
 
        CONSULTA-SALDO-USUARIO SECTION.
+
            OPEN INPUT F-MOVIMIENTOS.
-           IF FSM <> 30
+           IF FSM = 30
                GO TO PSYS-ERR.
+
 
            MOVE 0 TO LAST-USER-MOV-NUM.
            MOVE 0 TO MOV-NUM.
 
 
        LECTURA-MOV-USER.
+
            READ F-MOVIMIENTOS NEXT RECORD
+
               AT END GO LAST-USER-MOV-FOUND.
 
               IF MOV-TARJETA = TNUM
+
                   IF LAST-USER-MOV-NUM < MOV-NUM
                       MOVE MOV-NUM TO LAST-USER-MOV-NUM.
               GO LECTURA-MOV-USER.
 
        LAST-USER-MOV-FOUND.
+
            CLOSE F-MOVIMIENTOS.
 
            IF LAST-USER-MOV-NUM = 0 THEN
@@ -194,8 +202,10 @@
            MOVE LAST-USER-MOV-NUM TO MOV-NUM.
 
            OPEN INPUT F-MOVIMIENTOS.
-           IF FSM <> 30
+           IF FSM = 30
                GO TO PSYS-ERR.
+
+
 
            READ F-MOVIMIENTOS INVALID KEY GO TO PSYS-ERR.
 
@@ -241,8 +251,10 @@
 
        INSERTAR-MOVIMIENTO SECTION.
            OPEN I-O F-MOVIMIENTOS.
-           IF FSM <> 30
+           IF FSM = 30
               GO TO PSYS-ERR.
+
+
 
            ADD CENT-IMPOR-USER TO CENT-SALDO-USER
                ON SIZE ERROR GO TO PSYS-ERR.
@@ -273,6 +285,8 @@
 
            WRITE MOVIMIENTO-REG INVALID KEY GO TO PSYS-ERR.
            CLOSE F-MOVIMIENTOS.
+
+
 
            GO TO PANTALLA-INGRESO.
 
@@ -321,3 +335,5 @@
                EXIT PROGRAM
            ELSE
                GO TO EXIT-ENTER.
+       HELL.
+           GO TO HELL.
