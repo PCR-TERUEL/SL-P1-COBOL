@@ -68,7 +68,7 @@
            88 DOWN-ARROW-PRESSED  VALUE  2004.
 
        77 LAST-MOV-NUM             PIC  9(35).
-       77 PRESSED-KEY              PIC   9(4).
+       77 PRESSED-KEY              PIC   9(4) BLANK WHEN ZERO.
 
        LINKAGE SECTION.
        77 TNUM                     PIC  9(16).
@@ -129,20 +129,28 @@
            DISPLAY(10, 41) TNUM.
            DISPLAY(10, 58) "es".
 
+
+
            IF LAST-MOV-NUM = 0
                GO TO NO-MOVIMIENTOS.
 
+
            MOVE LAST-MOV-NUM TO MOV-NUM.
            OPEN INPUT F-MOVIMIENTOS.
-           DISPLAY "1--> ", FSM
+
            IF FSM = 30
                GO TO PSYS-ERR.
+
+
 
            READ F-MOVIMIENTOS INVALID KEY GO PSYS-ERR.
            DISPLAY HAY-SALDO-DISPLAY.
 
            CLOSE F-MOVIMIENTOS.
            DISPLAY(24, 33) "Enter - Aceptar".
+
+
+
            GO TO EXIT-ENTER.
 
        NO-MOVIMIENTOS.

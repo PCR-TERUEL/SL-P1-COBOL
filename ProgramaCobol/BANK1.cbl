@@ -73,7 +73,7 @@
 
        77 PRESSED-KEY              PIC  9(4).
        77 PIN-INTRODUCIDO          PIC  9(4).
-       77 CHOICE                   PIC  9(1).
+       77 CHOICE                   PIC  9(1)  BLANK WHEN ZERO.
 
 
        SCREEN SECTION.
@@ -90,6 +90,7 @@
 
        PROCEDURE DIVISION.
        IMPRIMIR-CABECERA.
+
 
            SET ENVIRONMENT 'COB_SCREEN_EXCEPTIONS' TO 'Y'
            SET ENVIRONMENT 'COB_SCREEN_ESC'        TO 'Y'
@@ -122,6 +123,7 @@
            ACCEPT CHOICE ON EXCEPTION
            IF ENTER-PRESSED
                GO TO P2
+
            ELSE
                GO TO P1-ENTER.
 
