@@ -97,8 +97,9 @@
 
            DISPLAY BLANK-SCREEN.
 
-           DISPLAY (2, 26) "Cajero Automatico UnizarBank"
-               WITH FOREGROUND-COLOR IS BLUE.
+           DISPLAY "Cajero Automatico UnizarBank"
+               LINE 2 COLUMN 26
+               WITH FOREGROUND-COLOR BLUE.
 
            MOVE FUNCTION CURRENT-DATE TO CAMPOS-FECHA.
 
@@ -222,11 +223,11 @@
            CLOSE INTENTOS.
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
-           DISPLAY (9, 25) "Ha ocurrido un error interno"
-               WITH FOREGROUND-COLOR IS BLACK
+           DISPLAY "Ha ocurrido un error interno" LINE 9 COLUMN 25
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
-           DISPLAY (11, 32) "Vuelva mas tarde"
-               WITH FOREGROUND-COLOR IS BLACK
+           DISPLAY "Vuelva mas tarde" LINE 11 COLUMN 32
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
            DISPLAY (24, 33) "Enter - Aceptar".
            GO TO PINT-ERR-ENTER.
@@ -238,15 +239,16 @@
            CLOSE INTENTOS.
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
-           DISPLAY "(9 20) Se ha sobrepasado el numero de intentos"
-               WITH FOREGROUND-COLOR IS BLACK
+           DISPLAY
+           "Se ha sobrepasado el numero de intentos" LINE 9 COLUMN 20
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
-           DISPLAY (11, 18)
-      -"Por su seguridad se ha bloqueado la tarjeta"
-               WITH FOREGROUND-COLOR IS BLACK
+           DISPLAY "Por su seguridad se ha bloqueado la tarjeta"
+               LINE 11 COLUMN 18
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
-           DISPLAY (12, 30) "Acuda a una sucursal"
-               WITH FOREGROUND-COLOR IS BLACK
+           DISPLAY "Acuda a una sucursal" LINE 12 COLUMN 30
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
            DISPLAY (24, 33) "Enter - Aceptar".
 
@@ -266,18 +268,18 @@
            CLOSE INTENTOS.
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
-           DISPLAY (9, 26) "El codigo PIN es incorrecto"
-               WITH FOREGROUND-COLOR IS BLACK
+           DISPLAY "El codigo PIN es incorrecto"
+               LINE 9 COLUMN 26
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
-           DISPLAY (11, 30) "Le quedan "
-               WITH FOREGROUND-COLOR IS BLACK
+           DISPLAY "Le quedan " LINE 11 COLUMN 30
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
-           DISPLAY (11, 40) IINTENTOS
-               WITH FOREGROUND-COLOR IS BLACK
+           DISPLAY IINTENTOS LINE 11 COLUMN 40
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
-           DISPLAY (11, 42) " intentos"
-
-               WITH FOREGROUND-COLOR IS BLACK
+           DISPLAY  " intentos" LINE 11 COLUMN 42
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
 
            DISPLAY (24, 1) "Enter - Aceptar".
