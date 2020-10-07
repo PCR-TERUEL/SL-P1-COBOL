@@ -91,7 +91,7 @@
            SET ENVIRONMENT 'COB_SCREEN_EXCEPTIONS' TO 'Y'.
 
            DISPLAY BLANK-SCREEN.
-           DISPLAY(2, 26) "Cajero Automatico UnizarBank"
+           DISPLAY "Cajero Automatico UnizarBank" LINE 2 COLUMN 26
                WITH FOREGROUND-COLOR IS 1.
            MOVE FUNCTION CURRENT-DATE TO CAMPOS-FECHA.
 
@@ -167,11 +167,13 @@
            CLOSE F-MOVIMIENTOS.
 
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
-           DISPLAY(9, 25) "Ha ocurrido un error interno"
-               WITH FOREGROUND-COLOR IS BLACK
+           DISPLAY "Ha ocurrido un error interno"
+               LINE 9 COLUMN 25
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
-           DISPLAY(11, 32) "Vuelva mas tarde"
-               WITH FOREGROUND-COLOR IS BLACK
+           DISPLAY "Vuelva mas tarde"
+               LINE 11 COLUMN 32
+               WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
            DISPLAY(24, 33) "Enter - Aceptar".
 
