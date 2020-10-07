@@ -169,7 +169,6 @@
 
 
        PSYS-ERR.
-
            CLOSE TARJETAS.
            CLOSE INTENTOS.
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
@@ -184,7 +183,6 @@
 
 
        PINT-ERR.
-
            CLOSE TARJETAS.
            CLOSE INTENTOS.
 

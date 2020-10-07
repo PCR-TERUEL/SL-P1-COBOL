@@ -126,6 +126,13 @@
 
 
        PROCEDURE DIVISION USING TNUM.
+
+       SELECCIONAR-TIPO-TRANSFERENCIA.
+           PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
+           DISPLAY (8, 15) "1 - Transferencia puntual".
+           DISPLAY (9, 15) "2 - Transferencia mensual".
+           DISPLAY (24, 34) "ESC - Salir".
+
        INICIO.
            SET ENVIRONMENT 'COB_SCREEN_EXCEPTIONS' TO 'Y'.
 
