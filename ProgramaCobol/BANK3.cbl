@@ -1,11 +1,9 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BANK3.
-
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
        SPECIAL-NAMES.
            CRT STATUS IS KEYBOARD-STATUS.
-
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
            SELECT F-MOVIMIENTOS ASSIGN TO DISK
@@ -13,8 +11,6 @@
            ACCESS MODE IS DYNAMIC
            RECORD KEY IS MOV-NUM
            FILE STATUS IS FSM.
-
-
        DATA DIVISION.
        FILE SECTION.
        FD F-MOVIMIENTOS
@@ -34,11 +30,8 @@
            02 MOV-CONCEPTO          PIC  X(35).
            02 MOV-SALDOPOS-ENT      PIC  S9(9).
            02 MOV-SALDOPOS-DEC      PIC   9(2).
-
-
        WORKING-STORAGE SECTION.
        77 FSM                       PIC   X(2).
-
        78 BLACK                     VALUE    0.
        78 BLUE                      VALUE    1.
        78 GREEN                     VALUE    2.
@@ -47,7 +40,6 @@
        78 MAGENTA                   VALUE    5.
        78 YELLOW                    VALUE    6.
        78 WHITE                     VALUE    7.
-
        01 CAMPOS-FECHA.
            05 FECHA.
                10 ANO               PIC   9(4).
@@ -59,7 +51,6 @@
                10 SEGUNDOS          PIC   9(2).
                10 MILISEGUNDOS      PIC   9(2).
            05 DIF-GMT               PIC  S9(4).
-
        01 KEYBOARD-STATUS           PIC   9(4).
            88 ENTER-PRESSED         VALUE    0.
            88 PGUP-PRESSED          VALUE 2001.
@@ -68,46 +59,36 @@
            88 DOWN-ARROW-PRESSED    VALUE 2004.
            88 ESC-PRESSED           VALUE 2005.
        77 PRESSED-KEY               PIC   9(4).
-
        77 DIA1-USUARIO              PIC   9(2).
        77 MES1-USUARIO              PIC   9(2).
        77 ANO1-USUARIO              PIC   9(4).
        77 DIA2-USUARIO              PIC   9(2).
        77 MES2-USUARIO              PIC   9(2).
        77 ANO2-USUARIO              PIC   9(4).
-
        77 EURENT1-USUARIO           PIC  S9(7).
        77 EURDEC1-USUARIO           PIC   9(2).
        77 EURENT2-USUARIO           PIC  S9(7).
        77 EURDEC2-USUARIO           PIC   9(2).
-
        77 FECHA-MIN                 PIC   9(8).
        77 FECHA-MOV                 PIC   9(8).
        77 FECHA-MAX                 PIC   9(8).
        77 CENT-MIN                  PIC  S9(9).
        77 CENT-MOV                  PIC  S9(9).
        77 CENT-MAX                  PIC  S9(9).
-
        77 MOV-EN-PANTALLA           PIC   9(2).
        77 LINEA-MOV-ACTUAL          PIC   9(2).
        77 MOV-VALIDO                PIC   9(1).
        77 MODULO-LIN-ACTUAL         PIC   9(1).
-
        01 TABLA.
            05 REGISTROS-EN-PANTALLA PIC  9(35) OCCURS 15 TIMES.
-
        77 CONTADOR                  PIC   9(2).
        77 ITERACIONES               PIC   9(2).
        77 COPIA-MOV                 PIC  9(35).
-
        LINKAGE SECTION.
        77 TNUM                      PIC  9(16).
-
-
        SCREEN SECTION.
        01 BLANK-SCREEN.
            05 FILLER LINE 1 BLANK SCREEN BACKGROUND-COLOR BLACK.
-
        01 FILTRO-MOVIMIENTOS.
            05 DIA-MIN BLANK ZERO AUTO UNDERLINE
                LINE 13 COL 37 PIC 9(2) USING DIA1-USUARIO.
@@ -131,9 +112,7 @@
                LINE 15 COL 48 PIC -9(7) USING EURENT2-USUARIO.
            05 EUR-DEC-MAX BLANK ZERO UNDERLINE
                LINE 15 COL 57 PIC 9(2) USING EURDEC2-USUARIO.
-
        01 FILA-MOVIMIENTO-PAR.
-
            05 MOV-DIA-PAR LINE LINEA-MOV-ACTUAL COL 02
                FOREGROUND-COLOR YELLOW PIC 99 FROM MOV-DIA.
            05 SEPARADOR-PAR-1 LINE LINEA-MOV-ACTUAL COL 04
@@ -173,7 +152,6 @@
                FOREGROUND-COLOR YELLOW PIC A FROM ",".
            05 MOV-SALDOPOS-DEC-PAR LINE LINEA-MOV-ACTUAL COL 78
                FOREGROUND-COLOR YELLOW PIC 99 FROM MOV-SALDOPOS-DEC.
-
        01 FILA-MOVIMIENTO-IMPAR.
            05 MOV-DIA-IMPAR LINE LINEA-MOV-ACTUAL COL 02
                PIC 99 FROM MOV-DIA.
@@ -215,20 +193,14 @@
                PIC A FROM ",".
            05 MOV-SALDOPOS-DEC-IMPAR LINE LINEA-MOV-ACTUAL COL 78
                PIC 99 FROM MOV-SALDOPOS-DEC.
-
-
        PROCEDURE DIVISION USING TNUM.
        IMPRIMIR-CABECERA.
-
            SET ENVIRONMENT 'COB_SCREEN_EXCEPTIONS' TO 'Y'
            SET ENVIRONMENT 'COB_SCREEN_ESC'        TO 'Y'
-
            DISPLAY BLANK-SCREEN.
            DISPLAY(2, 26) "Cajero Automatico UnizarBank"
                WITH FOREGROUND-COLOR IS 1.
-
            MOVE FUNCTION CURRENT-DATE TO CAMPOS-FECHA.
-
            DISPLAY(4, 32) DIA.
            DISPLAY(4, 34) "-".
            DISPLAY(4, 35) MES.
@@ -237,48 +209,37 @@
            DISPLAY(4, 44) HORAS.
            DISPLAY(4, 46) ":".
            DISPLAY(4, 47) MINUTOS.
-
        PCONSULTA-MOV.
-
            INITIALIZE DIA1-USUARIO.
            INITIALIZE MES1-USUARIO.
            INITIALIZE ANO1-USUARIO.
            INITIALIZE DIA2-USUARIO.
            INITIALIZE MES2-USUARIO.
            INITIALIZE ANO2-USUARIO.
-
            INITIALIZE EURENT1-USUARIO.
            INITIALIZE EURDEC1-USUARIO.
            INITIALIZE EURENT2-USUARIO.
            INITIALIZE EURDEC2-USUARIO.
-
-
            DISPLAY(8, 8) "Se  mostraran los ultimos movimientos,".
            DISPLAY(8, 47) "de mas a menos recientes.".
-
            DISPLAY(10, 8) "Alternativamente, indique un intervalo".
            DISPLAY(10, 47) "de fechas y/o cantidades.".
-
            DISPLAY(13, 20) "Entre las fechas   /  /     y   /  /    ".
            DISPLAY(15, 15)
       -"Cantidad entre         .   EUR y         .   EUR".
-
            DISPLAY(24, 01) "Enter - Aceptar".
            DISPLAY(24, 65) "ESC - Cancelar".
-
            ACCEPT FILTRO-MOVIMIENTOS ON EXCEPTION
                IF ESC-PRESSED
                    EXIT PROGRAM
                ELSE
                    GO TO PCONSULTA-MOV.
-
            IF DIA2-USUARIO = 0
                IF MES2-USUARIO = 0
                    IF ANO2-USUARIO = 0
                        MOVE 99   TO DIA2-USUARIO
                        MOVE 99   TO MES2-USUARIO
                        MOVE 9999 TO ANO2-USUARIO.
-
            IF EURENT2-USUARIO = 0
                IF EURDEC2-USUARIO = 0
                    IF EURENT1-USUARIO = 0
@@ -287,18 +248,13 @@
                            MOVE 99       TO EURDEC2-USUARIO
                            MOVE -9999999  TO EURENT1-USUARIO
                            MOVE 99        TO EURDEC1-USUARIO.
-
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
-
            OPEN INPUT F-MOVIMIENTOS.
-
                IF FSM = 30
                    GO TO PSYS-ERR.
-
        POSICIONAR-FINAL.
            READ F-MOVIMIENTOS NEXT RECORD AT END GO PLECTURA-MOV.
-               GO TO POSICIONAR-FINAL.
-
+                GO TO POSICIONAR-FINAL.
        PLECTURA-MOV.
            DISPLAY(7, 8) "FECHA".
            DISPLAY(7, 18) "|".
@@ -307,21 +263,19 @@
            DISPLAY(7, 57) "IMPORTE".
            DISPLAY(7, 66) "|".
            DISPLAY(7, 71) "SALDO".
-
            DISPLAY(24, 2) "Re. pag - Esp. anteriores".
            DISPLAY(24, 33) "ESC - Salir".
            DISPLAY(24, 54) "Av. pag - Esp. posteriores".
-
            MOVE 0 TO MOV-EN-PANTALLA.
            MOVE 7 TO LINEA-MOV-ACTUAL.
-
-
+           PERFORM MOSTRAR.
        LEER-PRIMEROS.
            READ F-MOVIMIENTOS PREVIOUS RECORD AT END GO WAIT-ORDER.
-               MOVE 1 TO MOV-VALIDO.
-
+               PERFORM MOSTRAR.
+               GO TO LEER-PRIMEROS.
+       MOSTRAR.
+           MOVE 1 TO MOV-VALIDO.
                PERFORM FILTRADO THRU FILTRADO.
-
                IF MOV-VALIDO = 1
                    ADD 1 TO LINEA-MOV-ACTUAL
                    ADD 1 TO MOV-EN-PANTALLA
@@ -329,69 +283,50 @@
                        REGISTROS-EN-PANTALLA(MOV-EN-PANTALLA)
                    MOVE 0 TO MOV-VALIDO
                    PERFORM MOSTRAR-MOVIMIENTO THRU MOSTRAR-MOVIMIENTO.
-
                IF MOV-EN-PANTALLA = 15
                    GO TO WAIT-ORDER.
-
-               GO TO LEER-PRIMEROS.
-
        WAIT-ORDER.
-
            ACCEPT PRESSED-KEY ON EXCEPTION
-
               IF ESC-PRESSED THEN
                   CLOSE F-MOVIMIENTOS
                   EXIT PROGRAM
               END-IF
-
               IF PGDN-PRESSED THEN
                   GO TO FLECHA-ABAJO
               END-IF
-
               IF PGUP-PRESSED THEN
                   GO TO FLECHA-ARRIBA
               END-IF
-
            END-ACCEPT.
-
            GO TO WAIT-ORDER.
-
        FLECHA-ABAJO.
            MOVE REGISTROS-EN-PANTALLA(MOV-EN-PANTALLA) TO MOV-NUM.
            READ F-MOVIMIENTOS INVALID KEY GO WAIT-ORDER.
            GO TO LEER-VIEJO.
-
        FLECHA-ARRIBA.
            MOVE REGISTROS-EN-PANTALLA(1) TO MOV-NUM.
            READ F-MOVIMIENTOS INVALID KEY GO WAIT-ORDER.
            GO TO LEER-NUEVO.
-
        LEER-VIEJO.
            READ F-MOVIMIENTOS PREVIOUS RECORD
                AT END GO WAIT-ORDER.
-
                MOVE 1 TO MOV-VALIDO.
                PERFORM FILTRADO THRU FILTRADO.
-
                IF MOV-VALIDO = 1
                    MOVE 2 TO MOV-VALIDO
                    GO TO CONTROL-PANTALLA
                ELSE
                    GO TO LEER-VIEJO.
-
        LEER-NUEVO.
            READ F-MOVIMIENTOS NEXT RECORD
                AT END GO WAIT-ORDER.
-
                MOVE 1 TO MOV-VALIDO.
                PERFORM FILTRADO THRU FILTRADO.
-
                IF MOV-VALIDO = 1
                    MOVE 3 TO MOV-VALIDO
                    GO TO CONTROL-PANTALLA
                ELSE
                    GO TO LEER-NUEVO.
-
        CONTROL-PANTALLA.
            IF MOV-VALIDO = 2 THEN
                MOVE 0 TO MOV-VALIDO
@@ -406,48 +341,36 @@
                    GO TO WAIT-ORDER
                END-IF
            END-IF.
-
        REORDENAR-1.
            MOVE 2 TO CONTADOR.
            MOVE MOV-EN-PANTALLA TO ITERACIONES.
            SUBTRACT 1 FROM ITERACIONES.
-
            PERFORM ITERACIONES TIMES
                MOVE REGISTROS-EN-PANTALLA(CONTADOR) TO COPIA-MOV
                SUBTRACT 1 FROM CONTADOR
                MOVE COPIA-MOV TO REGISTROS-EN-PANTALLA(CONTADOR)
                ADD 2 TO CONTADOR
            END-PERFORM.
-
            MOVE MOV-NUM TO REGISTROS-EN-PANTALLA(MOV-EN-PANTALLA).
            PERFORM MOSTRAR-TABLA THRU MOSTRAR-TABLA.
-
            GO TO WAIT-ORDER.
-
        REORDENAR-2.
            MOVE MOV-EN-PANTALLA TO CONTADOR.
            SUBTRACT 1 FROM CONTADOR.
            MOVE MOV-EN-PANTALLA TO ITERACIONES.
            SUBTRACT 1 FROM ITERACIONES.
-
-
            PERFORM ITERACIONES TIMES
                MOVE REGISTROS-EN-PANTALLA(CONTADOR) TO COPIA-MOV
                ADD 1 TO CONTADOR
                MOVE COPIA-MOV TO REGISTROS-EN-PANTALLA(CONTADOR)
                SUBTRACT 2 FROM CONTADOR
            END-PERFORM.
-
            MOVE MOV-NUM TO REGISTROS-EN-PANTALLA(1).
-
            PERFORM MOSTRAR-TABLA THRU MOSTRAR-TABLA.
-
            GO TO WAIT-ORDER.
-
        MOSTRAR-TABLA.
            MOVE 8 TO LINEA-MOV-ACTUAL.
            MOVE 1 TO CONTADOR.
-
            PERFORM MOV-EN-PANTALLA TIMES
                MOVE REGISTROS-EN-PANTALLA(CONTADOR) TO MOV-NUM
                PERFORM READ-MOVIMIENTO THRU READ-MOVIMIENTO
@@ -455,13 +378,10 @@
                ADD 1 TO LINEA-MOV-ACTUAL
                ADD 1 TO CONTADOR
            END-PERFORM.
-
        READ-MOVIMIENTO.
            READ F-MOVIMIENTOS INVALID KEY GO TO PSYS-ERR.
-
        PSYS-ERR.
            CLOSE F-MOVIMIENTOS.
-
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
            DISPLAY(9, 25) "Ha ocurrido un error interno"
                WITH FOREGROUND-COLOR IS BLACK
@@ -470,57 +390,41 @@
                WITH FOREGROUND-COLOR IS BLACK
                     BACKGROUND-COLOR IS RED.
            DISPLAY(24, 33) "Enter - Aceptar".
-
        EXIT-ENTER.
            ACCEPT(24, 80) PRESSED-KEY
            IF ENTER-PRESSED
                EXIT PROGRAM
            ELSE
                GO TO EXIT-ENTER.
-
-
        FILTRADO.
-
            IF TNUM NOT = MOV-TARJETA
                MOVE 0 TO MOV-VALIDO.
-
            COMPUTE FECHA-MIN = (ANO1-USUARIO * 10000)
                                + (MES1-USUARIO * 100)
                                + DIA1-USUARIO.
-
            COMPUTE FECHA-MOV = (MOV-ANO * 10000)
                                + (MOV-MES * 100)
                                + MOV-DIA.
-
            COMPUTE FECHA-MAX = (ANO2-USUARIO * 10000)
                                + (MES2-USUARIO * 100)
                                + DIA2-USUARIO.
-
            IF FECHA-MIN > FECHA-MOV
                MOVE 0 TO MOV-VALIDO.
            IF FECHA-MAX < FECHA-MOV
                MOVE 0 TO MOV-VALIDO.
-
            COMPUTE CENT-MIN = (EURENT1-USUARIO * 100)
                               + (EURDEC1-USUARIO).
-
            COMPUTE CENT-MOV = (MOV-IMPORTE-ENT * 100)
                               + (MOV-IMPORTE-DEC).
-
            COMPUTE CENT-MAX = (EURENT2-USUARIO * 100)
                               + (EURDEC2-USUARIO).
-
            IF CENT-MIN > CENT-MOV
                MOVE 0 TO MOV-VALIDO.
            IF CENT-MAX < CENT-MOV
                MOVE 0 TO MOV-VALIDO.
-
-
        MOSTRAR-MOVIMIENTO.
-
            MOVE FUNCTION MOD(LINEA-MOV-ACTUAL, 2)
                TO MODULO-LIN-ACTUAL.
-
            IF MODULO-LIN-ACTUAL = 0
                DISPLAY FILA-MOVIMIENTO-PAR
            ELSE
