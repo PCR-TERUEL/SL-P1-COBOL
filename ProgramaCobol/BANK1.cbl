@@ -174,7 +174,7 @@
            DISPLAY (11, 15) "4 - Ingresar efectivo".
            DISPLAY (12, 15) "5 - Ordenar transferencia".
            DISPLAY (13, 15) "6 - Consultar transferencias".
-           DISPLAY (13, 15) "7 - Comprar entradas de espectaculos".
+           DISPLAY (14, 15) "7 - Comprar entradas de espectaculos".
            DISPLAY (15, 15) "8 - Cambiar clave".
            DISPLAY (24, 34) "ESC - Salir".
 
