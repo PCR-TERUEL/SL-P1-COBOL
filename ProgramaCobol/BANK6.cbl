@@ -20,6 +20,12 @@
            RECORD KEY IS MOV-NUM
            FILE STATUS IS FSM.
 
+           SELECT TRANSFERENCIAS ASSIGN TO DISK
+           ORGANIZATION IS INDEXED
+           ACCESS MODE IS DYNAMIC
+           RECORD KEY IS T-NUM
+           FILE STATUS IS FSTRANS.
+
 
        DATA DIVISION.
        FILE SECTION.
@@ -47,10 +53,29 @@
            02 MOV-SALDOPOS-ENT     PIC  S9(9).
            02 MOV-SALDOPOS-DEC     PIC   9(2).
 
+        FD TRANSFERENCIAS
+           LABEL RECORD STANDARD
+           VALUE OF FILE-ID IS "transferencias.ubd".
+       01 TRANSFERENCIA-REG.
+           02 T-NUM                        PIC   9(35).
+      * 0 no mensual/ 1 mensual
+           02 T-MENSUAL                    PIC   9(1).
+           02 T-TARJETA-ORIGEN             PIC   9(16).
+           02 T-TARJETA-DESTINO            PIC   9(16).
+           02 T-ANO                        PIC   9(4).
+           02 T-MES                        PIC   9(2).
+           02 T-DIA                        PIC   9(2).
+           02 T-HOR                        PIC   9(2).
+           02 T-MIN                        PIC   9(2).
+           02 T-SEG                        PIC   9(2).
+           02 T-IMPORTE-ENT                PIC  S9(7).
+           02 T-IMPORTE-DEC                PIC   9(2).
+
 
        WORKING-STORAGE SECTION.
-       77 FST                      PIC   X(2).
-       77 FSM                      PIC   X(2).
+       77 FST                          PIC   X(2).
+       77 FSM                          PIC   X(2).
+       77 FSTRANS                      PIC   X(2).
 
        78 BLACK                  VALUE      0.
        78 BLUE                   VALUE      1.
@@ -87,6 +112,8 @@
        77 LAST-USER-ORD-MOV-NUM    PIC  9(35).
        77 LAST-USER-DST-MOV-NUM    PIC  9(35).
 
+       77 LAST-TRANS-NUM           PIC  9(35).
+
        77 EURENT-USUARIO           PIC  S9(7).
        77 EURDEC-USUARIO           PIC   9(2).
        77 CUENTA-DESTINO           PIC  9(16).
@@ -98,6 +125,9 @@
 
        77 MSJ-ORD                  PIC  X(35) VALUE "Transferimos".
        77 MSJ-DST                  PIC  X(35) VALUE "Nos transfieren".
+
+       77 CHOICE                   PIC  9(1).
+
 
        LINKAGE SECTION.
        77 TNUM                     PIC  9(16).
@@ -126,6 +156,7 @@
 
 
        PROCEDURE DIVISION USING TNUM.
+
        INICIO.
            SET ENVIRONMENT 'COB_SCREEN_EXCEPTIONS' TO 'Y'.
 
@@ -134,6 +165,7 @@
            INITIALIZE EURENT-USUARIO.
            INITIALIZE EURDEC-USUARIO.
            INITIALIZE LAST-MOV-NUM.
+           INITIALIZE LAST-TRANS-NUM.
            INITIALIZE LAST-USER-ORD-MOV-NUM.
            INITIALIZE LAST-USER-DST-MOV-NUM.
 
@@ -152,6 +184,38 @@
            DISPLAY(4, 44) HORAS.
            DISPLAY(4, 46) ":".
            DISPLAY(4, 47) MINUTOS.
+
+       SELECCIONAR-TIPO-TRANSFERENCIA.
+           PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
+           DISPLAY (8, 15) "1 - Transferencia puntual".
+           DISPLAY (9, 15) "2 - Transferencia mensual".
+           DISPLAY (24, 34) "ESC - Salir".
+
+
+       PMENU.
+           ACCEPT CHOICE ON EXCEPTION
+               IF ESC-PRESSED
+                   GO TO IMPRIMIR-CABECERA
+               ELSE
+                   GO TO PMENU.
+               SUBTRACT 1 FROM CHOICE.
+
+
+
+       TRANSFENCIAS-OPEN.
+           OPEN I-O TRANSFERENCIAS.
+           IF FSTRANS = 30 THEN
+               GO TO PSYS-ERR
+           END-IF.
+
+       LECTURA-TRANSFERENCIAS.
+           READ TRANSFERENCIAS NEXT RECORD AT END GO TO MOV
+      -IMIENTOS-OPEN.
+           IF LAST-TRANS-NUM < T-NUM THEN
+               MOVE T-NUM TO LAST-TRANS-NUM
+           END-IF.
+           GO TO LECTURA-TRANSFERENCIAS.
+
 
        MOVIMIENTOS-OPEN.
            OPEN I-O F-MOVIMIENTOS.
@@ -173,6 +237,8 @@
 
        ORDENACION-TRF.
            CLOSE F-MOVIMIENTOS.
+           CLOSE TRANSFERENCIAS.
+           PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
 
            DISPLAY(8, 30) "Ordenar Transferencia".
            DISPLAY(10, 19) "Saldo Actual:".
@@ -220,6 +286,7 @@
            GO TO REALIZAR-TRF-VERIFICACION.
 
        NO-MOVIMIENTOS.
+           PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
            DISPLAY(10, 51) "0".
            DISPLAY(10, 52) ".".
            DISPLAY(10, 53) "00".
@@ -291,6 +358,7 @@
            CLOSE F-MOVIMIENTOS.
            MOVE LAST-USER-DST-MOV-NUM TO MOV-NUM.
            PERFORM MOVIMIENTOS-OPEN THRU MOVIMIENTOS-OPEN.
+           PERFORM TRANSFENCIAS-OPEN THRU TRANSFENCIAS-OPEN.
            READ F-MOVIMIENTOS INVALID KEY GO PSYS-ERR.
 
            COMPUTE CENT-SALDO-DST-USER = (MOV-SALDOPOS-ENT * 100)
@@ -299,6 +367,7 @@
            MOVE FUNCTION CURRENT-DATE TO CAMPOS-FECHA.
 
            ADD 1 TO LAST-MOV-NUM.
+           ADD 1 TO LAST-TRANS-NUM.
 
            MOVE LAST-MOV-NUM   TO MOV-NUM.
            MOVE TNUM           TO MOV-TARJETA.
@@ -309,10 +378,23 @@
            MOVE MINUTOS        TO MOV-MIN.
            MOVE SEGUNDOS       TO MOV-SEG.
 
+           MOVE LAST-TRANS-NUM             TO T-NUM.
+           MOVE CHOICE                     TO T-MENSUAL.
+           MOVE TNUM                       TO T-TARJETA-ORIGEN.
+           MOVE CUENTA-DESTINO             TO T-TARJETA-DESTINO.
+           MOVE ANO                        TO T-ANO.
+           MOVE MES                        TO T-MES.
+           MOVE DIA                        TO T-DIA.
+           MOVE HORAS                      TO T-HOR.
+           MOVE MINUTOS                    TO T-MIN.
+           MOVE SEGUNDOS                   TO T-SEG.
+
            MULTIPLY -1 BY EURENT-USUARIO.
            MOVE EURENT-USUARIO TO MOV-IMPORTE-ENT.
+           MOVE EURENT-USUARIO TO T-IMPORTE-ENT.
            MULTIPLY -1 BY EURENT-USUARIO.
            MOVE EURDEC-USUARIO TO MOV-IMPORTE-DEC.
+           MOVE EURDEC-USUARIO TO T-IMPORTE-DEC.
 
            MOVE MSJ-ORD        TO MOV-CONCEPTO.
 
@@ -323,6 +405,7 @@
                TO MOV-SALDOPOS-DEC.
 
            WRITE MOVIMIENTO-REG INVALID KEY GO TO PSYS-ERR.
+           WRITE TRANSFERENCIA-REG INVALID KEY GO TO PSYS-ERR.
 
            ADD 1 TO LAST-MOV-NUM.
 
