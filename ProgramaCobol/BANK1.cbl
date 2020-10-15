@@ -91,7 +91,6 @@
        PROCEDURE DIVISION.
        IMPRIMIR-CABECERA.
 
-
            SET ENVIRONMENT 'COB_SCREEN_EXCEPTIONS' TO 'Y'
            SET ENVIRONMENT 'COB_SCREEN_ESC'        TO 'Y'
 
@@ -114,11 +113,11 @@
 
 
        P1.
-           DISPLAY (8, 28) "Bienvenido a UnizarBank".
+           DISPLAY (8,28) "Bienvenido a UnizarBank".
            DISPLAY (10, 18)
-      -"Por favor, introduzca la tarjeta para operar".
+               "Por favor, introduzca la tarjeta para operar".
 
-           DISPLAY (24, 33) "Enter - Aceptar".
+           DISPLAY (14, 32) "Enter - Aceptar".
 
        P1-ENTER.
            ACCEPT CHOICE ON EXCEPTION
@@ -131,7 +130,7 @@
 
        P2.
            PERFORM IMPRIMIR-CABECERA THRU IMPRIMIR-CABECERA.
-           DISPLAY (24, 33) "ESC - Salir".
+           DISPLAY (15, 33) "ESC - Salir".
            INITIALIZE TNUM.
            INITIALIZE PIN-INTRODUCIDO.
            INITIALIZE TPIN.
@@ -229,7 +228,7 @@
            DISPLAY "Vuelva mas tarde" LINE 11 COLUMN 32
                WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
-           DISPLAY (24, 33) "Enter - Aceptar".
+           DISPLAY (14, 33) "Enter - Aceptar".
            GO TO PINT-ERR-ENTER.
 
 
@@ -250,7 +249,7 @@
            DISPLAY "Acuda a una sucursal" LINE 12 COLUMN 30
                WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
-           DISPLAY (24, 33) "Enter - Aceptar".
+           DISPLAY (18, 29) "Enter - Aceptar".
 
        PINT-ERR-ENTER.
            ACCEPT CHOICE ON EXCEPTION
@@ -282,8 +281,8 @@
                WITH FOREGROUND-COLOR IS WHITE
                     BACKGROUND-COLOR IS RED.
 
-           DISPLAY (24, 1) "Enter - Aceptar".
-           DISPLAY (24, 65) "ESC - Cancelar".
+           DISPLAY (20, 1) "Enter - Aceptar".
+           DISPLAY (20, 65) "ESC - Cancelar".
 
        PPIN-ERR-ENTER.
            ACCEPT CHOICE ON EXCEPTION
